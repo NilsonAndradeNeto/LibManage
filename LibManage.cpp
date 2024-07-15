@@ -1,6 +1,5 @@
-
 #include <iostream>
-#define TAM 10
+
 
 using namespace std;
 
@@ -52,24 +51,50 @@ struct retirada{
 
 };
 
-bool aux_geral;//aux_geral para verificar se o livro ja foi cadastrado
-bool aux_geral2=false;//aux para ver se um autor ja foi cadastrado
-bool aux_geral3=false;//aux para ver se a editora ja foi cadastrada
-int aux_geral4;//aux para armazenar a possicao, para verficar se esta em atraso
+bool aux_geral;
+bool aux_geral2=false;
+bool aux_geral3=false;
+int  aux_geral4;
 
-static int contador =1;// static para cadastro_autor e imprimir_autor;
-static int contador2=1;// static para cadastro_editora e imprimir_editora;
-static int contador3=1;// static para cadastro_pessoa e imprimir_pessoa;
-static int contador4=1;// static para cadastro_livroo e imprimir_livro ;
-static int contador5=1;// static para cadastro_revista e imprimir_revista;
+static int contador =1;
+static int contador2=1;
+static int contador3=1;
+static int contador4=1;
+static int contador5=1;
 
-//
 int autor_selecionado;
 int editora_selecionado;
 
+template <typename T>
+
+void realocarVetor(T *&vetor5, int &tamanho) {
+
+    int novoTamanho = tamanho + 5;
+
+    T *novoVetor5 = new T[novoTamanho];
+
+    for (int i = 0; i < tamanho; i++) {
+        novoVetor5[i] = vetor5[i];
+    }
+
+    delete[] vetor5;
+    vetor5 = novoVetor5;
+    tamanho = novoTamanho;
+
+    cout<<""<<endl;
+    cout<<" Vetor adicionado +5 "<<endl;
+    system("pause");
+}
+
+void cadastro_autor(autor *&nome_autor,int &tam_autor){
+
+    nome_autor =  new autor[tam_autor];
+
+    if(contador == tam_autor){
+        realocarVetor(nome_autor,tam_autor);
+    }
 
 
-void cadastro_autor(autor nome_autor[]){
 
     system("cls");
     cout<<"\t\t\t\t\t     _______________________________"<<endl;
@@ -97,7 +122,15 @@ void cadastro_autor(autor nome_autor[]){
     aux_geral2=true;
 }
 
-void cadastro_editora(editora nome_editora[]){
+void cadastro_editora(editora *&nome_editora, int &tam_editora){
+
+    nome_editora = new editora[tam_editora];
+
+    if(contador2 == tam_editora){
+        realocarVetor(nome_editora,tam_editora);
+    }
+
+
 
     system("cls");
     cout<<"\t\t\t\t\t     _______________________________"<<endl;
@@ -126,7 +159,14 @@ void cadastro_editora(editora nome_editora[]){
     contador2++;
 }
 
-void cadastro_pessoa(pessoa nome_usuario[]){
+void cadastro_pessoa(pessoa *&nome_usuario, int &tam_usuario){
+
+
+    nome_usuario = new pessoa[tam_usuario];
+    if(contador3 == tam_usuario){
+        realocarVetor(nome_usuario,tam_usuario);
+    }
+
 
     system("cls");
     cout<<"\t\t\t\t\t     _______________________________"<<endl;
@@ -176,7 +216,6 @@ void imprimir_editora(editora nome_editora[]){
     for(int i=0;i<contador2;i++){
         if(i>=1){
 
-
             cout<<"\t\t\t\t\t     _______________________________"<<endl;
             cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
             cout<<"\t\t\t\t\t    ||                            ||"<<endl;
@@ -192,8 +231,6 @@ void imprimir_pessoa(pessoa nome_usuario[]){
 
     for(int i=0;i<contador3;i++){
         if(i>=1){
-
-
             cout<<"\t\t\t\t\t     _______________________________"<<endl;
             cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
             cout<<"\t\t\t\t\t    ||                            ||"<<endl;
@@ -204,8 +241,8 @@ void imprimir_pessoa(pessoa nome_usuario[]){
         }
     }
 }
-//
-void alterar_autor(autor nome_autor[]){
+
+void alterar_autor(autor nome_autor[], int TAM){
 
     system("cls");
     string alterar;
@@ -263,10 +300,8 @@ void alterar_autor(autor nome_autor[]){
         cout<<"\t\t\t\t\t    |______________________________|"<<endl;
     }
 }
-//
-void alterar_editora(editora nome_editora[]){
 
-
+void alterar_editora(editora nome_editora[], int TAM){
 
     string alterar;
     int codigo;
@@ -284,10 +319,7 @@ void alterar_editora(editora nome_editora[]){
 
         cin>> codigo;
 
-
-
         for(int i=codigo;i<TAM;i++){
-
 
             system("cls");
             cout<<"\t\t\t\t\t     _______________________________"<<endl;
@@ -299,8 +331,6 @@ void alterar_editora(editora nome_editora[]){
             cout<<"\t\t\t\t\t    |______________________________|"<<endl;
             cin>>alterar;
             nome_editora[codigo].nome=alterar;
-
-
 
             system("cls");
             cout<<"\t\t\t\t\t     _______________________________"<<endl;
@@ -331,15 +361,17 @@ void alterar_editora(editora nome_editora[]){
     }
 }
 
-void cadastro_livro(livros book[],autor nome_autor[], editora nome_editora[]){
+void cadastro_livro(livros *&book,autor nome_autor[], editora nome_editora[], int &tam_book){
 
     string cadastro;
     int opcao,OPCAO;
     int aux;
 
+    if(contador4 == tam_book){
+        realocarVetor(book,tam_book);
+    }
 
-
-    for(int i=contador4;i<TAM;i++){
+    for(int i=contador4;i<tam_book;i++){
 
         aux_geral=true;
 
@@ -392,7 +424,7 @@ void cadastro_livro(livros book[],autor nome_autor[], editora nome_editora[]){
         cout<<"\t\t\t\t\t    |______________________________|"<<endl;
         imprimir_editora(nome_editora);
         cin>>editora_selecionado;
-        book[i].editora=nome_editora[autor_selecionado].nome;
+        book[i].editora = nome_editora[autor_selecionado].nome;
         system("break");
         system("cls");
         break;
@@ -416,11 +448,17 @@ void imprimir_livro(livros book[], autor nome_autor[]){
     }
 }
 
-void cadastro_revista(revistas magazine[],editora nome_editora[]){
+void cadastro_revista(revistas *&magazine, editora nome_editora[], int &tam){
+
     static int contador=0;
     contador ++;
 
-    for(int i=contador5;i<TAM;i++){
+
+    if(contador == tam){
+        realocarVetor(magazine,tam);
+    }
+
+    for(int i=contador5;i<tam;i++){
 
         system("cls");
         aux_geral=true;
@@ -480,165 +518,170 @@ void imprimir_revista(revistas magazine[], editora nome_editora[]){
         }
     }
 }
-//
-void alterar_livro_revista(livros book[],revistas magazine[],autor nome_autor[],editora nome_editora[]){// fiz um void para altera o livro ea revista chamando as struct livros,revistas,autor e editora
+
+void alterar_livro_revista(livros book[],revistas magazine[],autor nome_autor[],editora nome_editora[], int tam_book, int tam_magazine){
 
     string alterar;
     int codigo;
-    if(aux_geral==true){
+    if(aux_geral==true)
 
-        system("cls");
-        cout<<"\t\t\t\t\t     _______________________________"<<endl;
-        cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-        cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-        cout<<"\t\t\t\t\t    || Alterar livro ou revista   ||"<<endl;
-        cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-        cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-        cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+    system("cls");
+    cout<<"\t\t\t\t\t     _______________________________"<<endl;
+    cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+    cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+    cout<<"\t\t\t\t\t    || Alterar livro ou revista   ||"<<endl;
+    cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+    cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+    cout<<"\t\t\t\t\t    |______________________________|"<<endl;
 
-        cin>>alterar;
+    cin>>alterar;
 
-        system("cls");
-        cout<<"\t\t\t\t\t     _______________________________"<<endl;
-        cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-        cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-        cout<<"\t\t\t\t\t    ||     DIGITE O CODIGO        ||"<<endl;
-        cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-        cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-        cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+    system("cls");
+    cout<<"\t\t\t\t\t     _______________________________"<<endl;
+    cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+    cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+    cout<<"\t\t\t\t\t    ||     DIGITE O CODIGO        ||"<<endl;
+    cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+    cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+    cout<<"\t\t\t\t\t    |______________________________|"<<endl;
 
-        cin>>codigo;
+    cin>>codigo;
 
-        for(int i=codigo;i<TAM;i++){
+    if(alterar=="livro"){
+        for(int i=codigo;i<tam_book;i++){
 
-            if(alterar=="livro"){
-                system("cls");
-                cout<<"----livro-codigo--("<<i<<")"<<endl;
+            system("cls");
+            cout<<"----livro-codigo--("<<i<<")"<<endl;
 
-                cout<<" nome titulo "<<endl;
-                cout<<"\t\t\t\t\t     _______________________________"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||        NOME DO TITULO      ||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    |______________________________|"<<endl;
-                cin.ignore();
-                getline(cin,book[i].titulo);
+            cout<<" nome titulo "<<endl;
+            cout<<"\t\t\t\t\t     _______________________________"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||        NOME DO TITULO      ||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+            cin.ignore();
+            getline(cin,book[i].titulo);
 
-                cout<<"\t\t\t\t\t     _______________________________"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||     ASSUNTO DO LIVRO       ||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    |______________________________|"<<endl;
-                cin.ignore();
-                getline(cin,book[i].assunto);
+            cout<<"\t\t\t\t\t     _______________________________"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||     ASSUNTO DO LIVRO       ||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+            cin.ignore();
+            getline(cin,book[i].assunto);
 
-                cout<<"\t\t\t\t\t     _______________________________"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    || SELECIONE O AUTOR DO LIVRO ||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    |______________________________|"<<endl;
-
-
-                imprimir_autor(nome_autor);
-                cin>>autor_selecionado;
-                book[i].autor=nome_autor[autor_selecionado].nome;
-
-                cout<<"\t\t\t\t\t     _______________________________"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    || SELECIONE A EDITORA DO LIVRO|"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+            cout<<"\t\t\t\t\t     _______________________________"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    || SELECIONE O AUTOR DO LIVRO ||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    |______________________________|"<<endl;
 
 
-                imprimir_editora(nome_editora);
-                cin>>editora_selecionado;
-                book[i].editora=nome_editora[editora_selecionado].nome;
+            imprimir_autor(nome_autor);
+            cin>>autor_selecionado;
+            book[i].autor=nome_autor[autor_selecionado].nome;
 
-                cout<<"";
-                cout<<"\t\t\t\t\t     _______________________________"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||    ALTERADO COM SUCESSO    ||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    |______________________________|"<<endl;
-
-                system("break");
-                system("cls");
-                break;
-            }
+            cout<<"\t\t\t\t\t     _______________________________"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    || SELECIONE A EDITORA DO LIVRO|"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    |______________________________|"<<endl;
 
 
-            else if(alterar=="revista"){
-                system("cls");
+            imprimir_editora(nome_editora);
+            cin>>editora_selecionado;
+            book[i].editora=nome_editora[editora_selecionado].nome;
 
-                cout<<"----revista-codigo--("<<i<<")"<<endl;
+            cout<<"";
+            cout<<"\t\t\t\t\t     _______________________________"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||    ALTERADO COM SUCESSO    ||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+
+            system("break");
+            system("cls");
+            break;
+        }
+
+    }
+
+    else if(alterar=="revista"){
+
+        for(int i=codigo;i<tam_magazine;i++){
+            system("cls");
+
+            cout<<"----revista-codigo--("<<i<<")"<<endl;
 
 
-                cout<<"\t\t\t\t\t     _______________________________"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||       NOME DO TITULO       ||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    |______________________________|"<<endl;
-                cin.ignore();
-                getline(cin,magazine[i].titulo);
+            cout<<"\t\t\t\t\t     _______________________________"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||       NOME DO TITULO       ||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+            cin.ignore();
+            getline(cin,magazine[i].titulo);
 
-                cout<<"\t\t\t\t\t     _______________________________"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||     ASSUNTO DA REVISTA     ||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    |______________________________|"<<endl;
-                cin.ignore();
-                getline(cin,magazine[i].assunto);
+            cout<<"\t\t\t\t\t     _______________________________"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||     ASSUNTO DA REVISTA     ||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+            cin.ignore();
+            getline(cin,magazine[i].assunto);
 
-                cout<<"\t\t\t\t\t     _______________________________"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||SELECIONE A EDITORA DO LIVRO||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+            cout<<"\t\t\t\t\t     _______________________________"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||SELECIONE A EDITORA DO LIVRO||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    |______________________________|"<<endl;
 
-                imprimir_editora(nome_editora);
+            imprimir_editora(nome_editora);
 
-                cin>>editora_selecionado;
-                magazine[i].editora=nome_editora[editora_selecionado].nome;
+            cin>>editora_selecionado;
+            magazine[i].editora=nome_editora[editora_selecionado].nome;
 
-                cout<<"\t\t\t\t\t     _______________________________"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||    ALTERADO COM SUCESSO    ||"<<endl;
-                cout<<"\t\t\t\t\t    ||                            ||"<<endl;
-                cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
-                cout<<"\t\t\t\t\t    |______________________________|"<<endl;
+            cout<<"\t\t\t\t\t     _______________________________"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||    ALTERADO COM SUCESSO    ||"<<endl;
+            cout<<"\t\t\t\t\t    ||                            ||"<<endl;
+            cout<<"\t\t\t\t\t    ||____________________________||"<<endl;
+            cout<<"\t\t\t\t\t    |______________________________|"<<endl;
 
-                system("break");
-                system("cls");
-                break;
-            }
+            system("break");
+            system("cls");
+            break;
         }
     }
+
+
+
     else{
         cout<< " cadastre antes de alterar " <<endl;
     }
 }
-//
-void pesquisa(livros book[],revistas magazine[],string pesquisar){
+
+void pesquisa(livros book[],revistas magazine[],string pesquisar, int tam_book, int tam_magazine){
 
     system("cls");
-    for(int i=0;i<TAM;i++){
+    for(int i=0;i<tam_book;i++){
         if(book[i].assunto==pesquisar ||book[i].autor==pesquisar || book[i].titulo==pesquisar || book[i].editora==pesquisar){
             system("cls");
 
@@ -665,7 +708,8 @@ void pesquisa(livros book[],revistas magazine[],string pesquisar){
             system("pause");
 
         }
-
+    }
+    for(int i=0;i<tam_magazine;i++){
         if(magazine[i].assunto==pesquisar ||magazine[i].editora==pesquisar|| magazine[i].titulo==pesquisar){
 
 
@@ -697,10 +741,10 @@ void pesquisa(livros book[],revistas magazine[],string pesquisar){
     }
 }
 
-void retirada_usuario(retirada remove[],livros book[],revistas magazine[],pessoa nome_usuario[],autor nome_autor[], editora nome_editora[]){
+void retirada_usuario(retirada *&remove,livros book[],revistas magazine[],pessoa nome_usuario[],autor nome_autor[], editora nome_editora[], int &tam){
 
-    static int contador=0;
-    contador++;
+    static int contador5=0;
+    contador5++;
 
     int aux;
 
@@ -708,7 +752,17 @@ void retirada_usuario(retirada remove[],livros book[],revistas magazine[],pessoa
     int livro_selecionada;
     int revista_selecionada;
 
-    for(int i=contador;i<TAM;i++){
+    remove= new retirada[tam];
+
+
+    if(contador5 == tam){
+        realocarVetor(remove,tam);
+
+        cout<<" entrou no if " <<endl;
+        system("pause");
+    }
+
+    for(int i=contador5;i<tam;i++){
         cout<< " Quem esta retirando " <<endl;
         imprimir_pessoa(nome_usuario);
         cin>>pessoa_selecionada;
@@ -843,8 +897,8 @@ void retirada_usuario(retirada remove[],livros book[],revistas magazine[],pessoa
         }
     }
 }
-//
-void verificar_usuario(retirada remove[], int aux) {
+
+void verificar_usuario(retirada remove[], int aux, int TAM) {
     static int contador=0;
     contador++;
     bool atrasado = false;
@@ -887,8 +941,7 @@ void verificar_usuario(retirada remove[], int aux) {
     }
 }
 
-//
-void pesquisar_usuario(retirada remove[], livros book[], pessoa nome_usuario[]){
+void pesquisar_usuario(retirada remove[], livros book[], pessoa nome_usuario[], int TAM){
     string pesquisa_pessoa;
 
 
@@ -930,7 +983,7 @@ void pesquisar_usuario(retirada remove[], livros book[], pessoa nome_usuario[]){
             cout<<"\t\t\t\t\t   `---------------------~___~--------------------'' "<<endl;
 
             aux_geral4=i;
-            verificar_usuario(remove,aux_geral4);
+            verificar_usuario(remove,aux_geral4,TAM);
             system("pause");
         }
         else if (pesquisa_pessoa==remove[i].nome_revista){
@@ -953,7 +1006,7 @@ void pesquisar_usuario(retirada remove[], livros book[], pessoa nome_usuario[]){
             cout<<"\t\t\t\t\t   `---------------------~___~--------------------'' "<<endl;
 
             aux_geral4=i;
-            verificar_usuario(remove,aux_geral4);
+            verificar_usuario(remove,aux_geral4,TAM);
             system("pause");
 
         }
@@ -962,17 +1015,20 @@ void pesquisar_usuario(retirada remove[], livros book[], pessoa nome_usuario[]){
 }
 
 int main()
-{    system("COLOR E");
+{    system("COLOR F");
+
+    int tam_autor=3,tam_editora=3,tam_usuario=3,tam_remove=3,tam_magazine=3,tam_book=3;
+    int tamanho=3;
+    int contador_case_selecinado=1;
 
 
-    livros   book[200];
-    revistas magazine[200];
-    retirada remove[200];
-    pessoa   nome_usuario[200];
-    autor    nome_autor[200];
-    editora  nome_editora[200];
+    livros   *book         = new livros[tam_book];
+    revistas *magazine     = new revistas[tam_magazine];
+    retirada *remove       = new retirada[tam_remove];
+    pessoa   *nome_usuario = new pessoa[tam_usuario];
+    autor    *nome_autor   = new autor[tam_autor];
+    editora  *nome_editora = new editora[tam_editora];
 
-    // variavel auxliares
     int opcao;
     string pesquisar;
     int resposta_case1,resposta_case2;
@@ -1006,20 +1062,21 @@ int main()
         cout<<"\t\t\t\t\t    |/_____________________________\|"<<endl;
 
         cin>>opcao;
-        //haran vai falar
+
         switch(opcao){
+
         case 1:
             system("cls");
             cout<< " 1-cadastrar autor  2-alterar autor  "<<endl;
             cin>>resposta_case1;
 
             if(resposta_case1==1){
-                cadastro_autor(nome_autor);
+                contador_case_selecinado++;
+                cadastro_autor(nome_autor,tam_autor);
             }
             else if(resposta_case1==2){
-                alterar_autor(nome_autor);
+                alterar_autor(nome_autor,tam_autor);
             }
-
             break;
 
         case 2:
@@ -1029,46 +1086,51 @@ int main()
             cin>>resposta_case2;
 
             if(resposta_case2==1){
-                cadastro_editora(nome_editora);
+                cadastro_editora(nome_editora,tam_editora);
+                contador_case_selecinado++;
             }
             else if(resposta_case2==2){
-                alterar_editora(nome_editora);
+                alterar_editora(nome_editora,tam_editora);
             }
-
             break;
 
         case 3:
+            contador_case_selecinado++;
             system("cls");
-            cadastro_livro(book,nome_autor,nome_editora);
+            cadastro_livro(book,nome_autor,nome_editora,tam_book);
             break;
 
         case 4:
+            contador_case_selecinado++;
             system("cls");
-            cadastro_revista(magazine,nome_editora);
+            cadastro_revista(magazine,nome_editora,tam_magazine);
             break;
 
         case 5:
-            cadastro_pessoa(nome_usuario);
+            contador_case_selecinado++;
+            cadastro_pessoa(nome_usuario,tam_usuario);
             break;
 
         case 6:
             system("cls");
+
             cout<< " oque voce desejar pesquisar " <<endl;
             cin.ignore();
             getline(cin,pesquisar);
-            pesquisa(book,magazine,pesquisar);
+            pesquisa(book,magazine,pesquisar,tam_book,tam_magazine);
             break;
 
         case 7:
-            pesquisar_usuario(remove,book,nome_usuario);
+            pesquisar_usuario(remove,book,nome_usuario,tam_usuario);
             break;
         case 8:
-            alterar_livro_revista(book,magazine,nome_autor,nome_editora);
+            alterar_livro_revista(book,magazine,nome_autor,nome_editora,tam_book,tam_magazine);
             break;
 
         case 9:
             system("cls");
-            retirada_usuario(remove,book,magazine,nome_usuario,nome_autor,nome_editora);
+            contador_case_selecinado++;
+            retirada_usuario(remove,book,magazine,nome_usuario,nome_autor,nome_editora,tam_remove);
             break;
 
         case 10:
@@ -1080,5 +1142,13 @@ int main()
         }
 
     }while(opcao!=10);
+
+    delete[] book;
+    delete[] magazine;
+    delete[] remove;
+    delete[] nome_usuario;
+    delete[] nome_editora;
+    delete[] nome_autor;
+
     return 0;
 }
